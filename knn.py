@@ -48,10 +48,30 @@ class KNN:
         
         return result
 
+def evaluate(predictions, true_labels):
+    correct = sum(p == t for p, t in zip(predictions, true_labels))
+    total = len(true_labels)
+    accuracy = correct / total
+    precision = correct / len(predictions) if predictions else 0
+    recall = correct / len(true_labels) if true_labels else 0
+    return accuracy, precision, recall
+
 classifier = KNN(k=3)
 classifier.fit(points)
-print(f"Category of the test data point -> {classifier.predict(test_point)}")
+predictions = []
+true_labels = []
+
+for point, true_category in test_point:
+    predicted_category = classifier.predict(point)
+    print(f"Point: {point}")
+    print(f"True Category: {true_category}")
+    print(f"Predicted Category: {predicted_category}\n")
+    predictions.append(predicted_category)
+    true_labels.append(true_category)
+
+accuracy, precision, recall = evaluate(predictions, true_labels)
+print(f"Accuracy: {accuracy:.2f}")
+print(f"Precision: {precision:.2f}")
+print(f"Recall: {recall:.2f}")
 
 
-
-    
