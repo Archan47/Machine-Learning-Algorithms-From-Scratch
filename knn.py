@@ -8,7 +8,12 @@ points = {
     "Red" : [[5,6], [4,5], [4,6], [6,6], [5,4], [3,4], [12,10], ]
 }
 
-test_point = [15,12]
+test_point = [
+    ([15,12], "Red"),
+    ([2,3], "Blue"),
+    ([5,5], "Red"),
+    ([1,2], "Blue")
+]
 
 def euclideanDistance(p,q):
     
@@ -52,9 +57,8 @@ def evaluate(predictions, true_labels):
     correct = sum(p == t for p, t in zip(predictions, true_labels))
     total = len(true_labels)
     accuracy = correct / total
-    precision = correct / len(predictions) if predictions else 0
-    recall = correct / len(true_labels) if true_labels else 0
-    return accuracy, precision, recall
+    
+    return accuracy
 
 classifier = KNN(k=3)
 classifier.fit(points)
@@ -69,9 +73,8 @@ for point, true_category in test_point:
     predictions.append(predicted_category)
     true_labels.append(true_category)
 
-accuracy, precision, recall = evaluate(predictions, true_labels)
+accuracy = evaluate(predictions, true_labels)
 print(f"Accuracy: {accuracy:.2f}")
-print(f"Precision: {precision:.2f}")
-print(f"Recall: {recall:.2f}")
+
 
 
