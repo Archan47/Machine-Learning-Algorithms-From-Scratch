@@ -78,4 +78,4 @@ skl_knn_model_predictions = skl_knn_model.predict(X_test)
 
 skl_knn_model_accuracy = accuracy_score(y_test,skl_knn_model_predictions)
 
-print(f"Sklearn KNN Accuracy: {accuracy:.2f}")
+print(f"Sklearn KNN Accuracy: {skl_knn_model_accuracy:.2f}")
