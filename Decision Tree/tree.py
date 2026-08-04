@@ -8,7 +8,7 @@ class Node:
         self.threshold = threshold
         self.right = right
         self.left = left
-        self.value=None
+        self.value=value
 
     def is_leaf_node(self):
         return self.value is not None
@@ -38,13 +38,19 @@ class DecisionTree:
 
             return Node(value=leaf_value)
 
-        feat_idx = np.random.choice(n_feates, self.n_features, replace=False)
+        feat_idxs = np.random.choice(n_feates, self.n_features, replace=False)
 
         #2. finding the best feature split
 
-        best_feature, best_threshold = self.best_split(X, y, feat_idx)
+        best_feature, best_threshold = self.best_split(X, y, feat_idxs)
 
         #3. creating child node
+
+        left_idxs, right_idxs = self._split(X[:,best_feature], best_threshold)
+        left = self.grow_tree(X[left_idxs, :], y[left_idxs], depth + 1)
+        right = self.grow_tree(X[right_idxs, :], y[right_idxs], depth + 1)
+
+        return Node(best_feature, best_threshold, left, right)
 
     def best_split(self, X, y, feat_idxs):
         best_gain = -1 
@@ -102,6 +108,18 @@ class DecisionTree:
         return value
 
 
-    def predict():
-        pass
+    def predict(self, X):
+
+        return np.array([self._traverse_tree(x, self.root) for x in X])
+
+    def _traverse_tree(self, x, node):
+        if node.is_leaf_node():
+            return node.value
+
+        if x[node.feature] <= node.threshold:
+            return self._traverse_tree(x, node.left)
+
+        return self._traverse_tree(x, node.right)
+
+        
 
